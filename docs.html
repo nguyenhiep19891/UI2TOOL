@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>UI2TOOL Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Ensure UI2TOOL is loaded properly -->
+    <script src="./UI2TOOL.js"></script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background: #f8fafc !important;
+            margin: 0;
+            padding: 0;
+        }
+        .gitbook-sidebar {
+            background: #fff;
+            border-right: 1px solid #e5e7eb;
+            min-width: 220px;
+            max-width: 260px;
+            height: 100vh;
+            position: fixed;
+            left: 0; top: 0; bottom: 0;
+            padding: 32px 0 0 0;
+            box-shadow: 2px 0 12px 0 rgba(0,0,0,0.04);
+            transition: box-shadow 0.3s;
+            z-index: 100;
+        }
+        .gitbook-sidebar .sidebar-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 0 12px 0;
+            margin-bottom: 8px;
+            transition: filter 0.3s;
+        }
+        .gitbook-sidebar .sidebar-logo img {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px 0 rgba(37,99,235,0.08);
+            margin-right: 8px;
+            transition: transform 0.3s;
+        }
+        .gitbook-sidebar .sidebar-logo span {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #2563eb;
+            letter-spacing: -0.01em;
+            transition: color 0.3s;
+        }
+        .gitbook-sidebar .sidebar-logo:hover img {
+            transform: scale(1.08) rotate(-6deg);
+            filter: brightness(1.1);
+        }
+        .gitbook-sidebar .sidebar-logo:hover span {
+            color: #1d4ed8;
+        }
+        .gitbook-sidebar nav {
+            margin-top: 12px;
+        }
+        .gitbook-sidebar nav a {
+            display: block;
+            padding: 10px 24px;
+            color: #374151;
+            text-decoration: none;
+            border-left: 3px solid transparent;
+            transition: background 0.25s, border-color 0.25s, color 0.25s, transform 0.18s cubic-bezier(.4,0,.2,1);
+            border-radius: 0 20px 20px 0;
+            font-weight: 500;
+            position: relative;
+        }
+        .gitbook-sidebar nav a.active, .gitbook-sidebar nav a:hover {
+            background: #f1f5f9;
+            border-left: 3px solid #2563eb;
+            color: #2563eb;
+            transform: translateX(4px) scale(1.04);
+            box-shadow: 0 2px 8px 0 rgba(37,99,235,0.04);
+        }
+        .gitbook-sidebar nav a:after {
+            content: '';
+            display: block;
+            position: absolute;
+            left: 0; right: 0; bottom: 0;
+            height: 2px;
+            background: linear-gradient(90deg,#2563eb33,#fff0 60%);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .gitbook-sidebar nav a.active:after, .gitbook-sidebar nav a:hover:after {
+            opacity: 1;
+        }
+        .gitbook-main {
+            margin-left: 260px;
+            padding: 32px 32px 32px 32px;
+            max-width: 900px;
+            transition: padding-top 0.3s;
+        }
+        .lang-switch {
+            margin-left: auto;
+            margin-right: 32px;
+        }
+        .lang-btn {
+            background: #f3f4f6;
+            color: #374151;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 12px;
+            margin-left: 8px;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, transform 0.18s cubic-bezier(.4,0,.2,1);
+        }
+        .lang-btn.active, .lang-btn:hover {
+            background: #2563eb;
+            color: #fff;
+            transform: scale(1.08);
+        }
+        .code-block {
+            background: #f3f4f6;
+            border-radius: 6px;
+            padding: 16px;
+            font-size: 0.95em;
+            overflow-x: auto;
+            margin: 16px 0;
+            transition: box-shadow 0.2s;
+        }
+        .code-block:hover {
+            box-shadow: 0 4px 18px 0 rgba(37,99,235,0.08);
+        }
+        .demo-btns button {
+            margin-right: 8px;
+            margin-bottom: 8px;
+            transition: transform 0.18s cubic-bezier(.4,0,.2,1), box-shadow 0.18s;
+        }
+        .demo-btns button:hover {
+            transform: scale(1.06) translateY(-2px);
+            box-shadow: 0 2px 8px 0 rgba(37,99,235,0.08);
+        }
+
+        /* Mobile menu toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 200;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 8px;
+        }
+
+        @media (max-width: 900px) {
+            .gitbook-sidebar { 
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+            .gitbook-sidebar.active {
+                transform: translateX(0);
+            }
+            .gitbook-main { 
+                margin-left: 0; 
+                padding: 32px 16px;
+            }
+            .mobile-menu-toggle {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile menu toggle -->
+    <div class="mobile-menu-toggle" id="mobileMenuToggle">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="gitbook-sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <img src="https://avatars.githubusercontent.com/u/13027627?s=64" alt="UI2TOOL Logo" />
+            <span>UI2TOOL UI KIT</span>
+        </div>
+        <div class="lang-switch flex justify-center mb-2">
+            <button class="lang-btn" data-lang-btn="en" style="margin-left:0;">EN</button>
+            <button class="lang-btn active" data-lang-btn="vi">VI</button>
+        </div>
+        <nav>
+            <a href="#intro" class="active" data-section="intro">Giới thiệu</a>
+            <a href="#install" data-section="install">Cài đặt</a>
+            <a href="#usage" data-section="usage">Cách sử dụng</a>
+            <a href="#tooltip" data-section="tooltip">Tooltip</a>
+            <a href="#toast" data-section="toast">Toast</a>
+            <a href="#alert" data-section="alert">Alert</a>
+        </nav>
+    </aside>
+
+    <!-- Main content -->
+    <main class="gitbook-main">
+        <!-- Intro section -->
+        <section id="intro" class="mb-12">
+            <h1 class="text-3xl font-bold mb-4">UI2TOOL (JS UI Component Library)</h1>
+            <p class="mb-4">
+                <span data-lang-en="A simple, extensible UI utility library for browser extensions and web apps. Provides Tooltip, Toast, and Alert (modal) with zero setup.">
+                    Thư viện thành phần bổ sung UI đơn giản, mở rộng cho extension và web app. Cung cấp Tooltip, Toast, Alert (modal) không cần cấu hình phức tạp (nhúng là dùng).
+                </span>
+            </p>
+            
+            <div class="text-xs text-gray-500 mb-4">
+                <span data-lang-en="Version 1.1 &middot; Updated: May 20, 2025 &middot; Author: github.com/nguyenhiep19891 (2TOOL member)">
+                    Phiên bản 1.1 &middot; Cập nhật: 21/05/2025 &middot; Tác giả: github.com/nguyenhiep19891 (2TOOL member)
+                </span>
+            </div>
+            
+            <div class="mb-4 flex flex-wrap gap-2">
+                <span class="inline-block bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-mono">UI2TOOL.Tooltip</span>
+                <span class="inline-block bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs font-mono">UI2TOOL.Toast</span>
+                <span class="inline-block bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-mono">UI2TOOL.Alert</span>
+            </div>
+
+            <div class="mb-4 bg-white rounded shadow p-4">
+                <div class="text-lg font-semibold mb-2">
+                    <span data-lang-en="What is UI2TOOL?">UI2TOOL là gì?</span>
+                <div data-lang-en="A simple, extensible UI utility library for browser extensions and web apps. Provides Tooltip, Toast, and Alert (modal) with zero setup.">
+                    Thư viện giao diện đơn giản, dễ mở rộng cho tiện ích trình duyệt và web app, hỗ trợ Tooltip, Toast, Alert (modal)... mà không cần cấu hình phức tạp. 
+                </div>
+                <div class="text-xs text-gray-500 mt-2" data-lang-en="Fully written by AI (GitHub Copilot) and deployed by Nguyễn Hiệp (2TOOL) in Vietnam.">
+                    Được viết hoàn toàn bởi AI (GitHub Copilot) và được triển khai bởi Nguyễn Hiệp (2TOOL) tại Việt Nam (ngẫu hứng phát triển)
+                </div>
+        
+            </div>
+
+            <div class="mb-4 bg-green-50 rounded shadow p-4">
+                <div class="text-base font-semibold mb-2">
+                    <span data-lang-en="What's new in version 1.1?">Có gì mới ở phiên bản 1.1.x?</span>
+                </div>
+                <ul class="list-disc ml-6 text-sm">
+                    <li>
+                        <span data-lang-en="Added multi-instance support: You can now create multiple UI2TOOL instances for different containers.">
+                           v1.1.1 : Sửa lỗi cleanId bị cục bộ gây lỗi Alert (21/5/2025) by Hiep Nguyen
+                        </span>
+                    </li>
+                    <li>
+                        <span data-lang-en="Added multi-instance support: You can now create multiple UI2TOOL instances for different containers.">
+                            Thêm hỗ trợ nhiều instance: Có thể tạo nhiều instance UI2TOOL cho các vùng giao diện khác nhau.
+                        </span>
+                    </li>
+                    <li>
+                        <span data-lang-en="Improved Toast: More position options (top-left, top-center, center, etc.), and better styling.">
+                            Cải tiến Toast: Thêm nhiều vị trí hiển thị (top-left, top-center, center, v.v.), giao diện đẹp hơn.
+                        </span>
+                    </li>
+                    <li>
+                        <span data-lang-en="Tooltip API improvements: More flexible usage and manual control.">
+                            Nâng cấp Tooltip API: Linh hoạt hơn, dễ điều khiển thủ công.
+                        </span>
+                    </li>
+                    
+                </ul>
+            </div>
+            
+            <div class="bg-blue-50 p-4 rounded">
+                <h3 class="font-semibold mb-2">
+                    <span data-lang-en="Quick Links">Liên kết nhanh</span>
+                </h3>
+                <ul class="list-disc ml-5">
+                    <li>
+                        <a href="https://zalo.me/0969799738" class="text-blue-600 hover:underline">
+                            <span data-lang-en="Contact Author">Liên hệ tác giả (Hiệp Nguyễn 2TOOL)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/nguyenhiep19891/UI2TOOL" class="text-blue-600 hover:underline">
+                            <span data-lang-en="GitHub Repository UI2TOOL">GitHub Repository /UI2TOOL</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://nguyenhiep19891.github.io/UI2TOOL" class="text-blue-600 hover:underline">
+                            <span data-lang-en="Documentation">Tài liệu trực tuyến</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Install section -->
+        <section id="install" class="mb-12">
+            <h2 class="text-2xl font-bold mb-4 text-blue-600">
+                <span data-lang-en="Installation">Cài đặt</span>
+            </h2>
+            
+            <p class="mb-2">
+                <span data-lang-en="Include the UI2TOOL script in your HTML:">
+                    Nhúng script UI2TOOL vào HTML của bạn:
+                </span>
+            </p>
+            
+            <div class="code-block relative">
+                <pre class="bg-gray-100 p-4 rounded text-sm text-gray-800">&lt;script src="UI2TOOL.js"&gt;&lt;/script&gt;</pre>
+                <button class="absolute top-2 right-2 px-2 py-1 bg-blue-500 text-white text-xs rounded" onclick="copyCode(this)">Copy</button>
+            </div>
+            
+            <p class="text-gray-600 mt-4">
+                <span data-lang-en="After including the script, you can use UI2TOOL anywhere in your code without any additional setup.">
+                    Sau khi nhúng, bạn có thể sử dụng UI2TOOL ở bất kỳ đâu trong code mà không cần cài đặt thêm.
+                </span>
+            </p>
+        </section>
+
+        <!-- Usage section -->
+        <section id="usage" class="mb-12">
+            <h2 class="text-2xl font-bold mb-4 text-blue-600">
+                <span data-lang-en="Usage">Cách sử dụng</span>
+            </h2>
+            
+            <!-- Global usage -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold mb-2">
+                    <span data-lang-en="Global Usage">Sử dụng toàn cục</span>
+                </h3>
+                <p class="mb-2">
+                    <span data-lang-en="Call UI2TOOL methods directly without initialization:">
+                        Gọi các phương thức UI2TOOL trực tiếp không cần khởi tạo:
+                    </span>
+                </p>
+                
+                <div class="code-block relative">
+                    <pre class="bg-gray-100 p-4 rounded text-sm text-gray-800">// Tooltip
+UI2TOOL.Tooltip(element, "Nội dung tooltip", "top");
+UI2TOOL.Tooltip.showTooltip(element, "Nội dung tooltip", "right");
+UI2TOOL.Tooltip.hide();
+
+// Toast
+UI2TOOL.Toast("Đây là thông báo toast");  // Cú pháp rút gọn
+UI2TOOL.Toast.Show("Thông báo toast với cú pháp đầy đủ");
+UI2TOOL.Toast("Thông báo thành công", { type: "success" });
+UI2TOOL.Toast("Thông báo ở góc trên bên phải", { position: "top-right" });
+
+// Alert
+UI2TOOL.Alert("Nội dung thông báo");  // Cú pháp rút gọn
+UI2TOOL.Alert.Show("Nội dung thông báo", "Tiêu đề");</pre>
+                    <button class="absolute top-2 right-2 px-2 py-1 bg-blue-500 text-white text-xs rounded" onclick="copyCode(this)">Copy</button>
+                </div>
+            </div>
+            
+            <!-- Instance usage -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold mb-2">
+                    <span data-lang-en="Instance Usage">Sử dụng instance riêng biệt</span>
+                </h3>
+                <p class="mb-2">
+                    <span data-lang-en="Create multiple UI instances for different parts of your application:">
+                        Tạo nhiều instance UI cho các phần khác nhau trong ứng dụng:
+                    </span>
+                </p>
+                
+                <div class="code-block relative">
+                    <pre class="bg-gray-100 p-4 rounded text-sm text-gray-800">// Khởi tạo các instance riêng biệt
+const UI1_Left = new UI2TOOL('ui-left');     // Tạo container với id="ui-left"
+const UI2_Center = new UI2TOOL('ui-center'); // Tạo container với id="ui-center"
+const UI3_Right = new UI2TOOL('ui-right');   // Tạo container với id="ui-right"
+
+// CSS tùy chỉnh vị trí (tùy chọn)
+// #ui-left .u2t-toast-container { left: 1rem; right: auto; }
+// #ui-center .u2t-toast-container { left: 50%; transform: translateX(-50%); right: auto; }
+// #ui-right .u2t-toast-container { right: 1rem; left: auto; }
+
+// Sử dụng instance UI1_Left
+UI1_Left.Toast("Thông báo ở UI bên trái");
+UI1_Left.Alert("Cảnh báo ở UI bên trái");
+UI1_Left.Tooltip(element, "Tooltip ở UI bên trái", "top");
+
+// Sử dụng instance UI2_Center
+UI2_Center.Toast("Thông báo ở UI trung tâm");
+UI2_Center.Alert("Cảnh báo ở UI trung tâm");
+UI2_Center.Tooltip(element, "Tooltip ở UI trung tâm", "bottom");
+
+// Sử dụng instance UI3_Right
+UI3_Right.Toast("Thông báo ở UI bên phải");
+UI3_Right.Alert("Cảnh báo ở UI bên phải");
+UI3_Right.Tooltip(element, "Tooltip ở UI bên phải", "right");</pre>
+                    <button class="absolute top-2 right-2 px-2 py-1 bg-blue-500 text-white text-xs rounded" onclick="copyCode(this)">Copy</button>
+                </div>
+                
+                <div class="mt-6 border p-4 rounded-lg bg-gray-50">
+                    <h4 class="font-semibold mb-3">
+                        <span data-lang-en="Demo Multiple Instances">Demo nhiều instance</span>
+                    </h4>
+                    
+                    <div class="grid grid-cols-3 gap-4 mb-4">
+                        <!-- Left UI buttons -->
+                        <div class="border rounded p-3 bg-white">
+                            <h5 class="font-semibold text-sm mb-2 text-blue-600">
+                                <span data-lang-en="Left UI">UI Bên Trái</span>
+                            </h5>
+                            <div class="flex flex-col gap-2">
+                                <button id="left-ui-toast-btn" class="px-3 py-1 bg-blue-600 text-white rounded text-sm">
+                                    <span data-lang-en="Show Left Toast">Hiện Toast Trái</span>
+                                </button>
+                         
+                            </div>
+                        </div>
+                        
+                        <!-- Center UI buttons -->
+                        <div class="border rounded p-3 bg-white">
+                            <h5 class="font-semibold text-sm mb-2 text-purple-600">
+                                <span data-lang-en="Center UI">UI Giữa</span>
+                            </h5>
+                            <div class="flex flex-col gap-2">
+                                <button id="center-ui-toast-btn" class="px-3 py-1 bg-purple-600 text-white rounded text-sm">
+                                    <span data-lang-en="Show Center Toast">Hiện Toast Giữa</span>
+                                </button>
+                   
+                            </div>
+                        </div>
+                        
+                        <!-- Right UI buttons -->
+                        <div class="border rounded p-3 bg-white">
+                            <h5 class="font-semibold text-sm mb-2 text-green-600">
+                                <span data-lang-en="Right UI">UI Bên Phải</span>
+                            </h5>
+                            <div class="flex flex-col gap-2">
+                                <button id="right-ui-toast-btn" class="px-3 py-1 bg-green-600 text-white rounded text-sm">
+                                    <span data-lang-en="Show Right Toast">Hiện Toast Phải</span>
+                                </button>
+                  
+                            </div>
+                        </div>
+                    </div
+                    
+                    <!-- Demo Alert Chồng Nhau -->
+                    <div class="border rounded p-3 bg-white">
+                        <h5 class="font-semibold text-sm mb-2 text-red-600">
+                            <span data-lang-en="Overlapping Alerts Demo (Not Recommended)">Demo Alert Chồng Nhau (Không Khuyến Khích)</span>
+                        </h5>
+                        <p class="text-xs text-gray-600 mb-2">
+                            <span data-lang-en="This demonstrates why using multiple Alert instances is not recommended.">
+                                Minh họa tại sao không nên sử dụng nhiều instance Alert cùng lúc.
+                            </span>
+                        </p>
+                        <div class="flex gap-2">
+                            <button id="default-alert-btn" class="px-3 py-1 bg-red-600 text-white rounded text-sm">
+                                <span data-lang-en="Default Alert">Alert Mặc Định</span>
+                            </button>
+                  
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tooltip section -->
+        <section id="tooltip" class="mb-12">
+            <h2 class="text-2xl font-bold mb-4 text-blue-600">
+                <span data-lang-en="Tooltip">Tooltip</span>
+            </h2>
+            
+            <p class="mb-2">
+                <span data-lang-en="Create tooltips for any element with flexible positioning.">
+                    Tạo tooltip cho bất kỳ phần tử nào với vị trí linh hoạt.
+                </span>
+            </p>
+            
+            <!-- Basic tooltip usage -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold mb-2">
+                    <span data-lang-en="Basic Usage">Sử dụng cơ bản</span>
+                </h3>
+                
+                <div class="code-block relative">
+                    <pre class="bg-gray-100 p-4 rounded text-sm text-gray-800">// Gắn tooltip khi hover
+UI2TOOL.Tooltip.setTooltip(element, "Nội dung tooltip", "top");
+
+// Hiển thị tooltip ngay lập tức
+UI2TOOL.Tooltip.showTooltip(element, "Nội dung tooltip", "right");
+
+// Cú pháp rút gọn
+UI2TOOL.Tooltip(element, "Tooltip rút gọn", "bottom");
+
+// Ẩn tooltip
+UI2TOOL.Tooltip.hide();</pre>
+                    <button class="absolute top-2 right-2 px-2 py-1 bg-blue-500 text-white text-xs rounded" onclick="copyCode(this)">Copy</button>
+                </div>
+                
+                <div class="mt-4 border p-6 flex flex-wrap gap-4 rounded-lg bg-gray-50 items-center justify-center">
+                    <button id="tooltip-btn-left" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                        <span data-lang-en="Tooltip Left">Tooltip Trái</span>
+                    </button>
+                    <button id="tooltip-btn-right" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                        <span data-lang-en="Tooltip Right">Tooltip Phải</span>
+                    </button>
+                    <button id="tooltip-btn-top" class="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700">
+                        <span data-lang-en="Tooltip Top">Tooltip Trên</span>
+                    </button>
+                    <button id="tooltip-btn-bottom" class="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700">
+                        <span data-lang-en="Tooltip Bottom">Tooltip Dưới</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Manual control of tooltips -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold mb-2">
+                    <span data-lang-en="Manual Control">Điều khiển thủ công</span>
+                </h3>
+                
+                <div class="code-block relative">
+                    <pre class="bg-gray-100 p-4 rounded text-sm text-gray-800">// Hiển thị tooltip thủ công
+UI2TOOL.Tooltip(button, "Hiển thị tooltip này theo yêu cầu", "top");
+
+// Ẩn tooltip cụ thể
+UI2TOOL.Tooltip.hide();</pre>
+                    <button class="absolute top-2 right-2 px-2 py-1 bg-blue-500 text-white text-xs rounded" onclick="copyCode(this)">Copy</button>
+                </div>
+                
+                <div class="mt-4 border p-6 flex flex-wrap gap-4 rounded-lg bg-gray-50 items-center justify-center">
+                  
+                    <div class="flex gap-2">
+                        <button id="manual-tooltip-show" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                            <span data-lang-en="Show Tooltip">Gán Tooltip vào element</span>
+                        </button>
+                        <button id="manual-tooltip-hide" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                            <span data-lang-en="Hide Tooltip">Ẩn Tooltip</span>
+                        </button>
+
+                          <button id="manual-tooltip-target" class="px-4 py-2 bg-gray-100 text-black rounded hover:bg-gray-700 ml-10 border">
+                        <span data-lang-en="Target Button">Mục Tiêu gán tooltip thủ công</span>
+                    </button>
+                    
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Toast section -->
+        <section id="toast" class="mb-12">
+            <h2 class="text-2xl font-bold mb-4 text-blue-600">
+                <span data-lang-en="Toast">Toast</span>
+            </h2>
+            
+            <p class="mb-2">
+                <span data-lang-en="Show toast notifications with custom positions and styles.">
+                    Hiển thị thông báo toast với vị trí và kiểu tùy chỉnh.
+                </span>
+            </p>
+            
+            <!-- Basic toast usage -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold mb-2">
+                    <span data-lang-en="Basic Usage">Sử dụng cơ bản</span>
+                </h3>
+                
+                <div class="code-block relative">
+                    <pre class="bg-gray-100 p-4 rounded text-sm text-gray-800">// Cú pháp đầy đủ
+UI2TOOL.Toast.Show("Đây là thông báo toast");
+
+// Cú pháp rút gọn
+UI2TOOL.Toast("Đây là thông báo toast với cú pháp rút gọn");</pre>
+                    <button class="absolute top-2 right-2 px-2 py-1 bg-blue-500 text-white text-xs rounded" onclick="copyCode(this)">Copy</button>
+                </div>
+                
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <button id="toast-basic-btn" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                        <span data-lang-en="Show Toast">Hiện Toast</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Toast with positions -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold mb-2">
+                    <span data-lang-en="Toast Positions">Vị trí Toast</span>
+                </h3>
+                
+                <div class="code-block relative">
+                    <pre class="bg-gray-100 p-4 rounded text-sm text-gray-800">// Toast ở vị trí cụ thể
+UI2TOOL.Toast("Toast ở góc trên bên phải", { position: "top-right" });
+UI2TOOL.Toast("Toast ở giữa màn hình", { position: "center" });
+UI2TOOL.Toast("Toast ở góc dưới bên trái", { position: "bottom-left" });
+UI2TOOL.Toast("Toast ở góc dưới bên phải", { position: "bottom-right" });
+UI2TOOL.Toast("Toast ở giữa bên trái", { position: "center-left" });
+UI2TOOL.Toast("Toast ở giữa bên phải", { position: "center-right" });
+UI2TOOL.Toast("Toast ở góc trên bên trái", { position: "top-left" });
+UI2TOOL.Toast("Toast ở góc dưới bên trái", { position: "bottom-left" });
+</pre>
+                    <button class="absolute top-2 right-2 px-2 py-1 bg-blue-500 text-white text-xs rounded" onclick="copyCode(this)">Copy</button>
+                </div>
+                
+     
+                
+                <div class="mt-4 grid grid-cols-3 gap-2">
+                    <button class="px-3 py-2 bg-blue-600 text-white rounded text-sm" onclick="showPositionToast('top-left')">
+                        <span data-lang-en="Top Left">Trên Trái</span>
+                    </button>
+                    <button class="px-3 py-2 bg-blue-600 text-white rounded text-sm" onclick="showPositionToast('top-center')">
+                        <span data-lang-en="Top Center">Trên Giữa</span>
+                    </button>
+                    <button class="px-3 py-2 bg-blue-600 text-white rounded text-sm" onclick="showPositionToast('top-right')">
+                        <span data-lang-en="Top Right">Trên Phải</span>
+                    </button>
+                    
+                    <button class="px-3 py-2 bg-blue-600 text-white rounded text-sm" onclick="showPositionToast('center-left')">
+                        <span data-lang-en="Center Left">Giữa Trái</span>
+                    </button>
+                    <button class="px-3 py-2 bg-blue-600 text-white rounded text-sm" onclick="showPositionToast('center')">
+                        <span data-lang-en="Center">Giữa</span>
+                    </button>
+                    <button class="px-3 py-2 bg-blue-600 text-white rounded text-sm" onclick="showPositionToast('center-right')">
+                        <span data-lang-en="Center Right">Giữa Phải</span>
+                    </button>
+                    
+                    <button class="px-3 py-2 bg-blue-600 text-white rounded text-sm" onclick="showPositionToast('bottom-left')">
+                        <span data-lang-en="Bottom Left">Dưới Trái</span>
+                    </button>
+                    <button class="px-3 py-2 bg-blue-600 text-white rounded text-sm" onclick="showPositionToast('bottom-center')">
+                        <span data-lang-en="Bottom Center">Dưới Giữa</span>
+                    </button>
+                    <button class="px-3 py-2 bg-blue-600 text-white rounded text-sm" onclick="showPositionToast('bottom-right')">
+                        <span data-lang-en="Bottom Right">Dưới Phải</span>
+                    </button>
+                </div>
+                
+                <div class="mt-4">
+                    <button class="px-3 py-2 bg-purple-600 text-white rounded" onclick="showAllPositionToasts()">
+                        <span data-lang-en="Show All Positions">Hiển thị Tất cả Vị trí</span>
+                    </button>
+                    <button class="px-3 py-2 bg-gray-600 text-white rounded" onclick="UI2TOOL.Toast.RemoveAll()">
+                        <span data-lang-en="Remove All Toasts">Xóa Tất cả Toast</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Toast with types -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold mb-2">
+                    <span data-lang-en="Toast Types">Các Loại Toast</span>
+                </h3>
+                
+                <div class="code-block relative">
+                    <pre class="bg-gray-100 p-4 rounded text-sm text-gray-800">// Các loại Toast
+UI2TOOL.Toast("Thông báo thành công", { type: "success" });
+UI2TOOL.Toast("Thông báo lỗi", { type: "error" });
+UI2TOOL.Toast("Cảnh báo", { type: "warning" });
+UI2TOOL.Toast("Thông tin", { type: "info" });</pre>
+                    <button class="absolute top-2 right-2 px-2 py-1 bg-blue-500 text-white text-xs rounded" onclick="copyCode(this)">Copy</button>
+                </div>
+                
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <button class="px-3 py-2 bg-green-600 text-white rounded" onclick="showTypeToast('success')">
+                        <span data-lang-en="Success Toast">Toast Thành Công</span>
+                    </button>
+                    <button class="px-3 py-2 bg-red-600 text-white rounded" onclick="showTypeToast('error')">
+                        <span data-lang-en="Error Toast">Toast Lỗi</span>
+                    </button>
+                    <button class="px-3 py-2 bg-yellow-600 text-white rounded" onclick="showTypeToast('warning')">
+                        <span data-lang-en="Warning Toast">Toast Cảnh Báo</span>
+                    </button>
+                    <button class="px-3 py-2 bg-blue-600 text-white rounded" onclick="showTypeToast('info')">
+                        <span data-lang-en="Info Toast">Toast Thông Tin</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Instance-specific toast with position override -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold mb-2">
+                    <span data-lang-en="Instance Toast with Position Override">Toast từ Instance với Ghi đè Vị trí</span>
+                </h3>
+                
+                <div class="code-block relative">
+                    <pre class="bg-gray-100 p-4 rounded text-sm text-gray-800">// Tạo instance với vị trí mặc định là bên trái
+const UI_Left = new UI2TOOL('ui-left');
+
+// Gọi với vị trí mặc định
+UI_Left.Toast("Toast hiển thị ở vị trí mặc định bên trái");
+
+// Ghi đè vị trí - hiển thị ở góc trên bên phải thay vì bên trái
+UI_Left.Toast("Toast ghi đè vị trí sang góc trên bên phải", { position: "top-right" });</pre>
+                    <button class="absolute top-2 right-2 px-2 py-1 bg-blue-500 text-white text-xs rounded" onclick="copyCode(this)">Copy</button>
+                </div>
+                
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <button id="toast-instance-default-btn" class="px-3 py-2 bg-blue-600 text-white rounded">
+                        <span data-lang-en="Show Instance Default Position">Hiện Vị trí Mặc định</span>
+                    </button>
+                    <button id="toast-instance-override-btn" class="px-3 py-2 bg-purple-600 text-white rounded">
+                        <span data-lang-en="Show with Position Override">Hiện với Ghi đè Vị trí</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Alert section -->
+        <section id="alert" class="mb-12">
+            <h2 class="text-2xl font-bold mb-4 text-blue-600">
+                <span data-lang-en="Alert">Alert</span>
+            </h2>
+            
+            <p class="mb-2">
+                <span data-lang-en="Show modal dialog alerts with customizable content, title and buttons. Unlike Toast, Alert doesn't have positioning options.">
+                    Hiển thị hộp thoại alert dạng modal với nội dung, tiêu đề và nút có thể tùy chỉnh. Khác với Toast, Alert không có tùy chọn vị trí.
+                </span>
+            </p>
+            
+            <div class="bg-yellow-50 p-4 rounded mb-4">
+                <p class="text-sm text-yellow-800">
+                    <span data-lang-en="<strong>Note:</strong> It's recommended to use only the default UI2TOOL.Alert for modals. Creating multiple Alert instances is not recommended as it may cause overlapping alerts that confuse users.">
+                        <strong>Lưu ý:</strong> Nên chỉ sử dụng UI2TOOL.Alert mặc định cho modal. Không khuyến khích tạo nhiều instance Alert vì có thể gây ra các alert chồng lên nhau và gây nhầm lẫn cho người dùng.
+                    </span>
+                </p>
+            </div>
+            
+            <!-- Basic alert -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold mb-2">
+                    <span data-lang-en="Basic Alert">Alert Cơ Bản</span>
+                </h3>
+                
+                <div class="code-block relative">
+                    <pre class="bg-gray-100 p-4 rounded text-sm text-gray-800">// Chỉ hiển thị nội dung (tiêu đề mặc định là "Thông báo")
+UI2TOOL.Alert("Đây là nội dung của alert");
+
+// Cú pháp rút gọn
+UI2TOOL.Alert("Đây là nội dung với cú pháp rút gọn");</pre>
+                    <button class="absolute top-2 right-2 px-2 py-1 bg-blue-500 text-white text-xs rounded" onclick="copyCode(this)">Copy</button>
+                </div>
+                
+                <div class="mt-4">
+                    <button id="alert-basic-btn" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                        <span data-lang-en="Show Basic Alert">Hiện Alert Cơ Bản</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Alert with title -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold mb-2">
+                    <span data-lang-en="Alert with Title">Alert với Tiêu đề</span>
+                </h3>
+                
+                <div class="code-block relative">
+                    <pre class="bg-gray-100 p-4 rounded text-sm text-gray-800">// Hiển thị với nội dung và tiêu đề tùy chỉnh
+UI2TOOL.Alert.Show("Đây là nội dung của alert", "Tiêu đề tùy chỉnh");</pre>
+                    <button class="absolute top-2 right-2 px-2 py-1 bg-blue-500 text-white text-xs rounded" onclick="copyCode(this)">Copy</button>
+                </div>
+                
+                <div class="mt-4">
+                    <button id="alert-title-btn" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                        <span data-lang-en="Show Alert with Title">Hiện Alert với Tiêu đề</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Advanced alert -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold mb-2">
+                    <span data-lang-en="Advanced Alert">Alert Nâng cao</span>
+                </h3>
+                
+                <div class="code-block relative">
+                    <pre class="bg-gray-100 p-4 rounded text-sm text-gray-800">// Alert với nhiều tùy chọn nâng cao
+UI2TOOL.Alert.Show({
+    title: "Xác nhận thao tác",
+    content: "Bạn có chắc chắn muốn thực hiện hành động này?<br><b>Lưu ý:</b> Hành động không thể hoàn tác.",
+    icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1-7v2h2v-2h-2zm0-8v6h2V7h-2z" fill="currentColor"/></svg>',
+    buttons: [
+        { 
+            label: "Xác nhận", 
+            className: "bg-blue-600 text-white px-4 py-2 rounded", 
+            onClick: () => { 
+                UI2TOOL.Toast("Đã xác nhận thao tác!", { type: "success" });
+            }
+        },
+        { 
+            label: "Hủy", 
+            className: "bg-gray-500 text-white px-4 py-2 rounded", 
+            close: true 
+        }
+    ],
+    onClose: () => { 
+        console.log("Alert đã đóng");
+    }
+});</pre>
+                    <button class="absolute top-2 right-2 px-2 py-1 bg-blue-500 text-white text-xs rounded" onclick="copyCode(this)">Copy</button>
+                </div>
+                
+                <div class="mt-4">
+                    <button id="alert-advanced-btn" class="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700">
+                        <span data-lang-en="Show Advanced Alert">Hiện Alert Nâng cao</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <footer class="mt-16 text-xs text-gray-400">
+            UI2TOOL &copy; 2025 &middot; <a href="https://github.com/nguyenhiep19891" class="underline">github.com/nguyenhiep19891</a>
+        </footer>
+    </main>
+
+    <!-- Language handling and demo scripts -->
+    <script>
+        // --- Language handling ---
+        function getLang() {
+            return localStorage.getItem('ui2tool-lang') || 'vi';
+        }
+
+        function setLang(lang) {
+            localStorage.setItem('ui2tool-lang', lang);
+            
+            // Update all elements with data-lang-en attribute
+            document.querySelectorAll('[data-lang-en]').forEach(el => {
+                if (lang === 'en') {
+                    // Switch to English
+                    el.textContent = el.getAttribute('data-lang-en');
+                } else {
+                    // Restore original Vietnamese content if we stored it
+                    if (el.dataset.originalText) {
+                        el.textContent = el.dataset.originalText;
+                    }
+                }
+            });
+            
+            // First time initialization - store original Vietnamese text
+            if (!window.langInitialized) {
+                document.querySelectorAll('[data-lang-en]').forEach(el => {
+                    el.dataset.originalText = el.textContent;
+                });
+                window.langInitialized = true;
+            }
+            
+            // Update language buttons
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-lang-btn') === lang);
+            });
+            
+            // Update document language
+            document.documentElement.setAttribute('lang', lang);
+        }
+
+        // --- Utility functions ---
+        function copyCode(button) {
+            const pre = button.previousElementSibling;
+            navigator.clipboard.writeText(pre.textContent).then(() => {
+                const originalText = button.textContent;
+                button.textContent = getLang() === 'vi' ? "Đã sao chép!" : "Copied!";
+                setTimeout(() => (button.textContent = originalText), 2000);
+            });
+        }
+
+        // --- Tooltip demo functions ---
+        function setupTooltipDemos() {
+            // Setup basic tooltips
+            const tooltipBtnLeft = document.getElementById('tooltip-btn-left');
+            const tooltipBtnRight = document.getElementById('tooltip-btn-right');
+            const tooltipBtnTop = document.getElementById('tooltip-btn-top');
+            const tooltipBtnBottom = document.getElementById('tooltip-btn-bottom');
+            
+            UI2TOOL.Tooltip.setTooltip(tooltipBtnLeft, getLang() === 'en' ? "This tooltip appears on the left" : "Tooltip này xuất hiện bên trái", "left");
+            UI2TOOL.Tooltip.setTooltip(tooltipBtnRight, getLang() === 'en' ? "This tooltip appears on the right" : "Tooltip này xuất hiện bên phải", "right");
+            UI2TOOL.Tooltip.setTooltip(tooltipBtnTop, getLang() === 'en' ? "This tooltip appears on top" : "Tooltip này xuất hiện bên trên", "top");
+            UI2TOOL.Tooltip.setTooltip(tooltipBtnBottom, getLang() === 'en' ? "This tooltip appears on the bottom" : "Tooltip này xuất hiện bên dưới", "bottom");
+            
+            // Setup manual tooltip control
+            const manualTarget = document.getElementById('manual-tooltip-target');
+            const showBtn = document.getElementById('manual-tooltip-show');
+            const hideBtn = document.getElementById('manual-tooltip-hide');
+            
+            showBtn.onclick = function() {
+                UI2TOOL.Tooltip(manualTarget, getLang() === 'en' ? "Manually triggered tooltip" : "Tooltip được kích hoạt thủ công", "top");
+            };
+            
+            hideBtn.onclick = function() {
+                UI2TOOL.Tooltip.hide();
+            };
+        }
+
+        // --- Toast demo functions ---
+        function setupToastDemos() {
+            // Basic toast demo - just one button now
+            document.getElementById('toast-basic-btn').onclick = function() {
+                UI2TOOL.Toast.Show(getLang() === 'en' ? "Basic toast notification" : "Thông báo toast cơ bản");
+            };
+            
+            // Setup instance override demos
+            window.UI_Left = new UI2TOOL('ui-left');
+            
+            document.getElementById('toast-instance-default-btn').onclick = function() {
+                UI_Left.Toast(getLang() === 'en' ? "Toast from left instance" : "Toast từ instance bên trái");
+            };
+            
+            document.getElementById('toast-instance-override-btn').onclick = function() {
+                UI_Left.Toast(
+                    getLang() === 'en' ? "Position overridden to top-right" : "Vị trí được ghi đè sang góc trên bên phải", 
+                    { position: "top-right" }
+                );
+            };
+        }
+        
+        // Show toast at specific position
+        function showPositionToast(position) {
+            UI2TOOL.Toast(
+                getLang() === 'en' ? `Toast in ${position} position` : `Toast ở vị trí ${position}`, 
+                { position: position }
+            );
+        }
+        
+        // Show all position toasts
+        function showAllPositionToasts() {
+            const positions = [
+                'top-left', 'top-center', 'top-right',
+                'center-left', 'center', 'center-right',
+                'bottom-left', 'bottom-center', 'bottom-right'
+            ];
+            
+            positions.forEach((position, index) => {
+                setTimeout(() => {
+                    UI2TOOL.Toast(
+                        getLang() === 'en' ? `Toast in ${position} position` : `Toast ở vị trí ${position}`,
+                        { position: position, duration: 5000 }
+                    );
+                }, index * 300);
+            });
+        }
+        
+        // Show toast with specific type
+        function showTypeToast(type) {
+            const messages = {
+                success: getLang() === 'en' ? "Success! Operation completed." : "Thành công! Thao tác đã hoàn thành.",
+                error: getLang() === 'en' ? "Error! Something went wrong." : "Lỗi! Đã xảy ra sự cố.",
+                warning: getLang() === 'en' ? "Warning! Please review your input." : "Cảnh báo! Vui lòng kiểm tra lại dữ liệu.",
+                info: getLang() === 'en' ? "Info: This is an informational message." : "Thông tin: Đây là thông báo cung cấp thông tin."
+            };
+            
+            UI2TOOL.Toast(messages[type], { type: type });
+        }
+
+        // --- Alert demo functions ---
+        function setupAlertDemos() {
+            // Basic alert
+            document.getElementById('alert-basic-btn').onclick = function() {
+                UI2TOOL.Alert(getLang() === 'en' ? "This is a basic alert message." : "Đây là thông báo alert cơ bản.");
+            };
+            
+            // Alert with title
+            document.getElementById('alert-title-btn').onclick = function() {
+                UI2TOOL.Alert.Show(
+                    getLang() === 'en' ? "This alert has a custom title." : "Alert này có tiêu đề tùy chỉnh.",
+                    getLang() === 'en' ? "Custom Title" : "Tiêu đề Tùy chỉnh"
+                );
+            };
+            
+            // Advanced alert
+            document.getElementById('alert-advanced-btn').onclick = function() {
+                UI2TOOL.Alert.Show({
+                    title: getLang() === 'en' ? "Confirm Action" : "Xác nhận thao tác",
+                    content: getLang() === 'en' 
+                        ? "Are you sure you want to perform this action?<br><b>Note:</b> This action cannot be undone."
+                        : "Bạn có chắc chắn muốn thực hiện hành động này?<br><b>Lưu ý:</b> Hành động không thể hoàn tác.",
+                    icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1-7v2h2v-2h-2zm0-8v6h2V7h-2z" fill="currentColor"/></svg>',
+                    buttons: [
+                        { 
+                            label: getLang() === 'en' ? "Confirm" : "Xác nhận", 
+                            className: "bg-blue-600 text-white px-4 py-2 rounded", 
+                            onClick: () => { 
+                                UI2TOOL.Toast(
+                                    getLang() === 'en' ? "Action confirmed!" : "Đã xác nhận thao tác!", 
+                                    { type: "success" }
+                                );
+                            }
+                        },
+                        { 
+                            label: getLang() === 'en' ? "Cancel" : "Hủy", 
+                            className: "bg-gray-500 text-white px-4 py-2 rounded", 
+                            close: true 
+                        }
+                    ],
+                    onClose: () => { 
+                        console.log("Alert closed");
+                    }
+                });
+            };
+        }
+
+        // --- Multiple instances demo ---
+        function setupInstancesDemo() {
+            // Create the instances when the page loads
+            window.UI1_Left = new UI2TOOL('ui-left');
+            window.UI2_Center = new UI2TOOL('ui-center');
+            window.UI3_Right = new UI2TOOL('ui-right');
+            
+            // Apply custom positioning styles
+            const style = document.createElement('style');
+            style.textContent = `
+                #ui-left .u2t-toast-container { left: 1rem; right: auto; }
+                #ui-center .u2t-toast-container { left: 50%; transform: translateX(-50%); right: auto; }
+                #ui-right .u2t-toast-container { right: 1rem; left: auto; }
+            `;
+            document.head.appendChild(style);
+            
+            // Left UI buttons
+            document.getElementById('left-ui-toast-btn').onclick = function() {
+                UI1_Left.Toast(getLang() === 'en' ? "Toast from Left UI instance" : "Toast từ instance UI bên trái");
+            };
+       
+            // Center UI buttons
+            document.getElementById('center-ui-toast-btn').onclick = function() {
+                UI2_Center.Toast(getLang() === 'en' ? "Toast from Center UI instance" : "Toast từ instance UI ở giữa");
+            };
+            
+      
+            
+            // Right UI buttons
+            document.getElementById('right-ui-toast-btn').onclick = function() {
+                UI3_Right.Toast(getLang() === 'en' ? "Toast from Right UI instance" : "Toast từ instance UI bên phải");
+            };
+            
+     
+            
+            // Overlapping alerts demo
+            document.getElementById('default-alert-btn').onclick = function() {
+                UI2TOOL.Alert({
+                    title: getLang() === 'en' ? "Default Alert" : "Alert thứ nhất",
+                    content: getLang() === 'en' ? 
+                        "This is the default alert. An alert from UI1_Left instance will overlap after 2 seconds." : 
+                        "Đây là alert mặc định. Sẽ có alert của instance UI1_Left chồng lên sau 2 giây nữa.",
+                    buttons: [
+                        {
+                            label: "OK",
+                            className: "bg-blue-600 text-white px-3 py-1 rounded"
+                        }
+                    ]
+                });
+
+                setTimeout(() => {
+                    UI1_Left.Alert({
+                        title: getLang() === 'en' ? "Overlapping Alert" : "Alert thứ 2 đã Chồng Lên",
+                        content: getLang() === 'en' ? 
+                            "This alert overlaps the first one." : 
+                            "Alert này đã chồng chồng lên alert thứ nhất.",
+                        buttons: [
+                            {
+                                label: "OK",
+                                className: "bg-red-600 text-white px-3 py-1 rounded"
+                            }
+                        ]
+                    });
+                }, 2000);
+            };
+      
+        }
+
+        // --- Mobile menu handling ---
+        function setupMobileMenu() {
+            const menuToggle = document.getElementById('mobileMenuToggle');
+            const sidebar = document.getElementById('sidebar');
+            
+            menuToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+            });
+            
+            // Close menu when clicking on a link (mobile)
+            document.querySelectorAll('#sidebar a').forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 900) {
+                        sidebar.classList.remove('active');
+                    }
+                });
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (window.innerWidth <= 900 && 
+                    !sidebar.contains(event.target) && 
+                    !menuToggle.contains(event.target) &&
+                    sidebar.classList.contains('active')) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+
+        // --- Active section highlighting ---
+        function setupSectionHighlighting() {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('#sidebar nav a');
+            
+            function highlightActiveSection() {
+                let scrollPosition = window.scrollY;
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 100;
+                    const sectionBottom = sectionTop + section.offsetHeight;
+                    
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+                        // Remove active class from all links
+                        navLinks.forEach(link => link.classList.remove('active'));
+                        
+                        // Add active class to corresponding link
+                        const correspondingLink = document.querySelector(`nav a[href="#${section.id}"]`);
+                        if (correspondingLink) {
+                            correspondingLink.classList.add('active');
+                        }
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', highlightActiveSection);
+            
+            // Initial highlight check
+            highlightActiveSection();
+        }
+
+        // --- Main initialization ---
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if UI2TOOL is available
+            if (typeof UI2TOOL === 'undefined') {
+                console.error('UI2TOOL library not loaded! Check the path to UI2TOOL.js');
+                document.body.innerHTML = '<div style="color:red; padding:20px; font-size:18px;">Error: UI2TOOL library not loaded. Check the console for details.</div>' + document.body.innerHTML;
+                return;
+            }
+            
+            // Set initial language
+            setLang(getLang());
+            
+            // Setup language switching
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.onclick = function() {
+                    setLang(this.getAttribute('data-lang-btn'));
+                    // Refresh demos with new language
+                    setupTooltipDemos();
+                    setupToastDemos();
+                    setupAlertDemos();
+                }
+            });
+            
+            // Setup all demos
+            setupTooltipDemos();
+            setupToastDemos();
+            setupAlertDemos();
+            setupInstancesDemo();
+            
+            // Setup mobile menu
+            setupMobileMenu();
+            
+            // Setup active section highlighting
+            setupSectionHighlighting();
+            
+            console.log('UI2TOOL documentation initialized successfully');
+        });
+    </script>
+</body>
+</html>
